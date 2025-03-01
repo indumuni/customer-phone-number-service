@@ -1,0 +1,56 @@
+<!DOCTYPE module PUBLIC
+        "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+<module name="Checker">
+
+    <module name="TreeWalker">
+        <module name="AvoidStarImport"/> <!-- No wildcard imports (e.g., import java.util.*) -->
+        <module name="UnusedImports"/>   <!-- Flag unused imports -->
+
+        <!-- Naming Conventions -->
+        <module name="TypeName"/>        <!-- Enforce PascalCase for class names -->
+        <module name="MethodName"/>      <!-- Enforce camelCase for method names -->
+        <module name="ParameterName"/>   <!-- Enforce camelCase for parameters -->
+        <module name="LocalVariableName"/> <!-- Enforce camelCase for local variables -->
+        <module name="ConstantName"/>    <!-- Constants must be ALL_CAPS_WITH_UNDERSCORES -->
+
+        <!-- Spacing and Whitespace -->
+        <module name="WhitespaceAround"/> <!-- Require spaces around operators -->
+        <module name="WhitespaceAfter"/>  <!-- Require spaces after commas, keywords, etc. -->
+        <!-- Braces -->
+        <module name="NeedBraces"/>        <!-- Require braces for all control structures -->
+        <module name="RightCurly"/>       <!-- Place `}` on its own line -->
+
+        <!-- Spacing and Whitespace -->
+        <module name="WhitespaceAround"/> <!-- Require spaces around operators -->
+        <module name="WhitespaceAfter"/>  <!-- Require spaces after commas, keywords, etc. -->
+
+
+        <!-- Code Complexity and Design -->
+        <module name="CyclomaticComplexity">
+            <property name="max" value="15"/> <!-- Maximum complexity per method -->
+        </module>
+        <module name="MethodLength">
+            <property name="max" value="100"/> <!-- Methods should not exceed 100 lines -->
+        </module>
+        <module name="ClassDataAbstractionCoupling">
+            <property name="max" value="10"/> <!-- Limit dependencies per class -->
+        </module>
+
+        <!-- JavaDoc (Optional, Add if Needed) -->
+        <module name="JavadocType"/>
+        <module name="JavadocMethod"/>
+        <module name="JavadocVariable"/>
+
+        <!-- Newlines -->
+        <module name="EmptyLineSeparator"/> <!-- Blank line between class members/methods -->
+
+    </module>
+    <!-- Line Length -->
+    <module name="LineLength">
+        <property name="max" value="120"/> <!-- Max characters per line -->
+    </module>
+    <!-- Newlines -->
+    <module name="NewlineAtEndOfFile"/> <!-- Require files to end with a newline -->
+</module>
+

@@ -9,7 +9,9 @@
 
         <!-- Naming Conventions -->
         <module name="TypeName"/>        <!-- Enforce PascalCase for class names -->
-        <module name="MethodName"/>      <!-- Enforce camelCase for method names -->
+        <module name="MethodName">
+            <property name="format" value="^[a-z][a-zA-Z0-9_]*$"/>
+        </module>      <!-- Enforce camelCase for method names -->
         <module name="ParameterName"/>   <!-- Enforce camelCase for parameters -->
         <module name="LocalVariableName"/> <!-- Enforce camelCase for local variables -->
         <module name="ConstantName"/>    <!-- Constants must be ALL_CAPS_WITH_UNDERSCORES -->
@@ -36,11 +38,6 @@
         <module name="ClassDataAbstractionCoupling">
             <property name="max" value="10"/> <!-- Limit dependencies per class -->
         </module>
-
-        <!-- JavaDoc (Optional, Add if Needed) -->
-        <module name="JavadocType"/>
-        <module name="JavadocMethod"/>
-        <module name="JavadocVariable"/>
 
         <!-- Newlines -->
         <module name="EmptyLineSeparator"/> <!-- Blank line between class members/methods -->

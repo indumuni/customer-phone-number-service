@@ -1,0 +1,165 @@
+openapi: 3.0.0
+info:
+  description: |
+    Belong Customer phone service that can search and manupulate phone status
+  version: "1.0.0"
+  title: Swagger Belong Customer Phones
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: indumuni@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+paths:
+  /phone:
+    get:
+      tags:
+        - phone
+      summary: Get all customer phone numbers in Belong
+      description: This could be a large list of phone numbers. May need to facilitate pagination. Withou pagination details will default to first page
+      operationId: getAllPhones
+      parameters:
+        - name: customerId
+          in: query
+          description: Customer's id that phone numbers require to filter 
+          required: false
+          explode: true
+          schema:
+            type: integer
+            format: int64
+        - name: pageNo
+          in: query
+          description: Page number that need to retrieve 
+          required: true
+          explode: true
+          schema:
+            type: string
+            default: 0
+        - name: pageSize
+          in: query
+          description: No of items required in a page 
+          required: true
+          explode: true
+          schema:
+            type: string
+            default: 100
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Phone'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Phone'
+        '400':
+          description: Invalid CustomerId, Invalid pageNo or pageSize
+
+  
+  '/phone/{phoneId}':
+    patch:
+      tags:
+        - phone
+      summary: patch phone number 
+      description: update phone with requested contents and 
+      operationId: patchPhoneById
+      parameters:
+        - name: phoneId
+          in: path
+          description: Phone id of the status to be change
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneStatus'
+        description: Patch phone body
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phone'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Phone'
+        '400':
+          description: Invalid Status
+        '404':
+          description: Phone not found
+
+components:
+  schemas:
+    Phone:
+      type: object
+      required:
+        - phoneId
+        - customerId
+        - phoneNumber
+        - status
+      properties:
+        phoneId:
+          type: integer
+          format: int64
+        customerId:
+          type: integer
+          format: int64
+        phoneNumber:
+          type: string
+          example: + 61 3 9888 5555
+        status:
+          type: string
+          description: phone status
+          enum:
+            - pending
+            - active
+            - inactive
+            - expired
+    PhoneStatus:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          description: phone status
+          enum:
+            - pending
+            - active
+            - inactive
+            - expired
+  requestBodies:
+    Phone:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Phone'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Phone'
+      description: Customer phone number contents
+      required: true
+    PhoneArray:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Phone'
+      description: List of phone numbers
+      required: true
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/indumuni/PhoneService/1.0.0

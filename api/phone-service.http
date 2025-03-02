@@ -1,0 +1,14 @@
+### GET request with all parameters
+GET http://localhost:8080/api/phones?customerId=11221&pageNo=0&pageSize=100
+
+###
+
+### GET request missing customerId
+GET http://localhost:8080/api/phones?pageNo=0&pageSize=100
+
+###
+
+### GET request with missing parametes
+GET http://localhost:8080/api/phones
+
+###

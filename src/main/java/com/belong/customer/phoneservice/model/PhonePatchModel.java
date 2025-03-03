@@ -1,13 +1,15 @@
 package com.belong.customer.phoneservice.model;
 
-public class PhonePatchModel {
-    private String status;
+import com.belong.customer.phoneservice.domain.Status;
 
-    public String getStatus() {
+public class PhonePatchModel {
+    private Status status;
+
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 }

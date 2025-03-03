@@ -1,6 +1,7 @@
 package com.belong.customer.phoneservice.controller;
 
 import com.belong.customer.phoneservice.domain.Phone;
+import com.belong.customer.phoneservice.domain.Status;
 import com.belong.customer.phoneservice.model.PhonePatchModel;
 import com.belong.customer.phoneservice.repository.PhoneRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.belong.customer.phoneservice.domain.Status.ACTIVE;
+import static com.belong.customer.phoneservice.domain.Status.EXPIRED;
+import static com.belong.customer.phoneservice.domain.Status.INACTIVE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.data.domain.PageRequest.of;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -46,11 +50,11 @@ public class PhoneControllerIntegrationTest {
 
         List<Phone> phoneResults = new ArrayList<>();
 
-        phoneResults.add(new Phone(3217L, "+1234567890", "active"));
-        phoneResults.add(new Phone(8448L, "+9876543210", "active"));
-        phoneResults.add(new Phone(8448L, "+1122334455", "suspended"));
-        phoneResults.add(new Phone(1925L, "+9988776655", "active"));
-        phoneResults.add(new Phone(4032L, "+5544332211", "inactive"));
+        phoneResults.add(new Phone(3217L, "+1234567890", ACTIVE));
+        phoneResults.add(new Phone(8448L, "+9876543210", ACTIVE));
+        phoneResults.add(new Phone(8448L, "+1122334455", EXPIRED));
+        phoneResults.add(new Phone(1925L, "+9988776655", ACTIVE));
+        phoneResults.add(new Phone(4032L, "+5544332211", INACTIVE));
 
         phoneRepository.saveAll(phoneResults);
     }
@@ -63,9 +67,9 @@ public class PhoneControllerIntegrationTest {
                 .andExpect(jsonPath("$.pageNo").value(0))
                 .andExpect(jsonPath("$.total").value(2))
                 .andExpect(jsonPath("$.content[0].number").value("+9876543210"))
-                .andExpect(jsonPath("$.content[0].status").value("active"))
+                .andExpect(jsonPath("$.content[0].status").value("ACTIVE"))
                 .andExpect(jsonPath("$.content[1].number").value("+1122334455"))
-                .andExpect(jsonPath("$.content[1].status").value("suspended"));
+                .andExpect(jsonPath("$.content[1].status").value("EXPIRED"));
     }
 
     @Test
@@ -108,7 +112,7 @@ public class PhoneControllerIntegrationTest {
     public void patchPhoneStatus_shouldUpdatePhoneStatus_givenValidPhoneNumber() throws Exception {
 
         PhonePatchModel patchModel = new PhonePatchModel();
-        patchModel.setStatus("suspended");
+        patchModel.setStatus(EXPIRED);
 
         Optional<Phone> validPhone = phoneRepository.findByCustomerId(
                 3217L,
@@ -122,7 +126,7 @@ public class PhoneControllerIntegrationTest {
         Phone original = validPhone.get();
         Long id = original.getId();
 
-        assertEquals("active", original.getStatus());
+        assertEquals(ACTIVE, original.getStatus());
 
         mockMvc.perform(
                         patch("/phones/{id}", id)
@@ -133,6 +137,6 @@ public class PhoneControllerIntegrationTest {
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.customerId").value(3217))
                 .andExpect(jsonPath("$.number").value("+1234567890"))
-                .andExpect(jsonPath("$.status").value("suspended"));
+                .andExpect(jsonPath("$.status").value("EXPIRED"));
     }
 }

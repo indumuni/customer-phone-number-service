@@ -17,12 +17,12 @@ public class Phone {
 
     private String number;
 
-    private String status;
+    private Status status;
 
     protected Phone() {
     }
 
-    public Phone(Long customerId, String number, String status) {
+    public Phone(Long customerId, String number, Status status) {
         this.customerId = customerId;
         this.number = number;
         this.status = status;
@@ -44,11 +44,11 @@ public class Phone {
         this.customerId = customerId;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

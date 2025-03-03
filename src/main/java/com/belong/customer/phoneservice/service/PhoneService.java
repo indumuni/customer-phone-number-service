@@ -1,6 +1,7 @@
 package com.belong.customer.phoneservice.service;
 
 import com.belong.customer.phoneservice.domain.Phone;
+import com.belong.customer.phoneservice.domain.Status;
 import com.belong.customer.phoneservice.model.PhoneModel;
 import com.belong.customer.phoneservice.model.PhoneResultsModel;
 import com.belong.customer.phoneservice.repository.PhoneRepository;
@@ -49,7 +50,7 @@ public class PhoneService {
                 .toList();
     }
 
-    public PhoneModel updatePhoneStatus(Long phoneId, String phoneStatus) {
+    public PhoneModel updatePhoneStatus(Long phoneId, Status phoneStatus) {
 
         Optional<Phone> byId = phoneRepository.findById(phoneId);
         if (byId.isPresent()) {

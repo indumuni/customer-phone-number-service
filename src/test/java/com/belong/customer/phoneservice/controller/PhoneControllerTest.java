@@ -2,8 +2,8 @@ package com.belong.customer.phoneservice.controller;
 
 
 import com.belong.customer.phoneservice.model.PhoneModel;
-import com.belong.customer.phoneservice.model.PhoneResultsModel;
 import com.belong.customer.phoneservice.model.PhonePatchModel;
+import com.belong.customer.phoneservice.model.PhoneResultsModel;
 import com.belong.customer.phoneservice.service.PhoneService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -15,10 +15,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 
+import static com.belong.customer.phoneservice.domain.Status.ACTIVE;
+import static com.belong.customer.phoneservice.domain.Status.EXPIRED;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -43,7 +44,7 @@ public class PhoneControllerTest {
     public void findPhones_shouldContainPhoneDetailAndPageDetails_giveValidRequest() throws Exception {
 
         ArrayList<PhoneModel> content = new ArrayList<>();
-        content.add(new PhoneModel(1L, 8448L, "+1234567890", "active"));
+        content.add(new PhoneModel(1L, 8448L, "+1234567890", ACTIVE));
 
         when(phoneService.findPhonesBy(any(), anyInt(), anyInt()))
                 .thenReturn(new PhoneResultsModel(0, 1, content));
@@ -55,29 +56,29 @@ public class PhoneControllerTest {
                 .andExpect(jsonPath("$.total").value(1))
                 .andExpect(jsonPath("$.content[0].id").value(1))
                 .andExpect(jsonPath("$.content[0].customerId").value(8448))
-                .andExpect(jsonPath("$.content[0].status").value("active"))
+                .andExpect(jsonPath("$.content[0].status").value("ACTIVE"))
                 .andExpect(jsonPath("$.content[0].number").value("+1234567890"));
     }
 
     @Test
     public void patchPhones_shouldReturnPhoneDetails_giveValidRequest() throws Exception {
 
-        when(phoneService.updatePhoneStatus(anyLong(), anyString()))
-                .thenReturn(new PhoneModel(1L, 8448L, "+1234567890", "active"));
+        when(phoneService.updatePhoneStatus(anyLong(), any()))
+                .thenReturn(new PhoneModel(1L, 8448L, "+1234567890", ACTIVE));
 
         PhonePatchModel patchModel = new PhonePatchModel();
-        patchModel.setStatus("suspended");
+        patchModel.setStatus(EXPIRED);
 
         mockMvc.perform(
-                patch("/phones/{id}", 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(patchModel)))
+                        patch("/phones/{id}", 1L)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(patchModel)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.customerId").value(8448L))
                 .andExpect(jsonPath("$.number").value("+1234567890"))
-                .andExpect(jsonPath("$.status").value("active"));
+                .andExpect(jsonPath("$.status").value("ACTIVE"));
 
     }
 }

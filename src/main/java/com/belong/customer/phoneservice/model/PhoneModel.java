@@ -1,4 +1,6 @@
 package com.belong.customer.phoneservice.model;
 
-public record PhoneModel(Long id, Long customerId, String number, String status) {
+import com.belong.customer.phoneservice.domain.Status;
+
+public record PhoneModel(Long id, Long customerId, String number, Status status) {
 }

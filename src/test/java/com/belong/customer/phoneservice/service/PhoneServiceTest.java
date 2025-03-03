@@ -1,6 +1,7 @@
 package com.belong.customer.phoneservice.service;
 
 import com.belong.customer.phoneservice.domain.Phone;
+import com.belong.customer.phoneservice.domain.Status;
 import com.belong.customer.phoneservice.model.PhoneModel;
 import com.belong.customer.phoneservice.model.PhoneResultsModel;
 import com.belong.customer.phoneservice.repository.PhoneRepository;
@@ -17,6 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.belong.customer.phoneservice.domain.Status.ACTIVE;
+import static com.belong.customer.phoneservice.domain.Status.EXPIRED;
+import static com.belong.customer.phoneservice.domain.Status.INACTIVE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -81,13 +85,13 @@ public class PhoneServiceTest {
     @Test
     public void patchPhone_shouldSavePhoneWithNewStatus_givenValidRequest() {
 
-        Optional<Phone> findPhone = Optional.of(new Phone(3217L, "+1234567890", "active"));
+        Optional<Phone> findPhone = Optional.of(new Phone(3217L, "+1234567890", ACTIVE));
         when(mockPhoneRepository.findById(anyLong())).thenReturn(findPhone);
 
-        Phone savedPhone = new Phone(3217L, "+1234567890", "suspended");
+        Phone savedPhone = new Phone(3217L, "+1234567890", EXPIRED);
         when(mockPhoneRepository.save(any(Phone.class))).thenReturn(savedPhone);
 
-        PhoneModel model = phoneService.updatePhoneStatus(3217L, "suspended");
+        PhoneModel model = phoneService.updatePhoneStatus(3217L, EXPIRED);
 
         assertEquals("+1234567890", model.number());
         assertEquals("suspended", model.status());
@@ -116,17 +120,17 @@ public class PhoneServiceTest {
 
     private static List<Phone> withAllCustomerPhones() {
         return List.of(
-        new Phone(3217L, "+1234567890", "active"),
-        new Phone(8271L, "+9876543210", "inactive"),
-        new Phone(8271L, "+1122334455", "suspended"),
-        new Phone(1925L, "+9988776655", "active"),
-        new Phone(4032L, "+5544332211", "inactive"));
+        new Phone(3217L, "+1234567890", ACTIVE),
+        new Phone(8271L, "+9876543210", INACTIVE),
+        new Phone(8271L, "+1122334455", EXPIRED),
+        new Phone(1925L, "+9988776655", ACTIVE),
+        new Phone(4032L, "+5544332211", INACTIVE));
     }
 
     private static List<Phone> withSpecificCustomerPhones() {
         List<Phone> phoneResults = new ArrayList<>();
-        phoneResults.add(new Phone(8271L, "+9876543210", "inactive"));
-        phoneResults.add(new Phone(8271L, "+1122334455", "suspended"));
+        phoneResults.add(new Phone(8271L, "+9876543210", INACTIVE));
+        phoneResults.add(new Phone(8271L, "+1122334455", EXPIRED));
         return phoneResults;
     }
 }

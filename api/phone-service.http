@@ -10,9 +10,13 @@ GET http://localhost:8080/api/phones?pageNo=0&pageSize=2
 GET http://localhost:8080/api/phones
 ###
 
+### GET phone, status:400 bad request
+GET http://localhost:8080/api/phones?customerId=A8271&pageNo=0&pageSize=100
+###
+
 ### GET phone, all phone with defaults
 PATCH http://localhost:8080/api/phones/5
 Content-Type: application/json
 
-{"status": "suspended"}
+{"status": "EXPIRED"}
 ###

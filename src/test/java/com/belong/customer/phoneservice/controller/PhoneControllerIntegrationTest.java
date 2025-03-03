@@ -158,7 +158,8 @@ public class PhoneControllerIntegrationTest {
                                 .content(objectMapper.writeValueAsString(patchModel)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("Phone with id 1000 does not exist"))
-                .andExpect(jsonPath("$.status").value(404));
+                .andExpect(jsonPath("$.error").value("Phone with id 1000 does not exist"))
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.path").value("/phones/1000"));
     }
 }

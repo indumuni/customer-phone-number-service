@@ -1,5 +1,7 @@
 package com.belong.customer.phoneservice.model;
 
-public record ErrorResponseModel(String message, int status) {
+import java.time.LocalDateTime;
+
+public record ErrorResponseModel(String error, int status, LocalDateTime timestamp, String path) {
 }
 

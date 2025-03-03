@@ -32,7 +32,7 @@ public class PhoneControllerTest {
 
 
     @Test
-    public void findPhones_ShouldContainPhoneDetailAndPageDetails() throws Exception {
+    public void findPhones_shouldContainPhoneDetailAndPageDetails_giveValidRequest() throws Exception {
 
         ArrayList<PhoneModel> content = new ArrayList<>();
         content.add(new PhoneModel(1L, 8448L, "+1234567890", "active"));

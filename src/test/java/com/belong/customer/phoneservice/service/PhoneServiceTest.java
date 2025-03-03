@@ -51,8 +51,8 @@ public class PhoneServiceTest {
 
         PhoneResultsModel phonesBy = phoneService.findPhonesBy(Optional.empty(), 0, 100);
 
-        assertEquals(0, phonesBy.getPageNo());
-        assertEquals(5, phonesBy.getTotal());
+        assertEquals(0, phonesBy.pageNo());
+        assertEquals(5, phonesBy.total());
     }
 
     @Test
@@ -61,9 +61,9 @@ public class PhoneServiceTest {
 
         PhoneResultsModel phonesBy = phoneService.findPhonesBy(Optional.empty(), 0, 100);
 
-        assertEquals(5, phonesBy.getContent().size());
+        assertEquals(5, phonesBy.content().size());
         assertEquals("[+1234567890, +9876543210, +1122334455, +9988776655, +5544332211]",
-                phonesBy.getContent().stream().map(PhoneModel::getNumber).toList().toString());
+                phonesBy.content().stream().map(PhoneModel::number).toList().toString());
     }
 
     @Test
@@ -72,9 +72,9 @@ public class PhoneServiceTest {
 
         PhoneResultsModel phonesBy = phoneService.findPhonesBy(Optional.of(8271L), 0, 100);
 
-        assertEquals(2, phonesBy.getContent().size());
+        assertEquals(2, phonesBy.content().size());
         assertEquals("[+9876543210, +1122334455]",
-                phonesBy.getContent().stream().map(PhoneModel::getNumber).toList().toString());
+                phonesBy.content().stream().map(PhoneModel::number).toList().toString());
     }
 
     private void mockPhoneRepositoryFindByCustomer(List<Phone> customerPhones) {

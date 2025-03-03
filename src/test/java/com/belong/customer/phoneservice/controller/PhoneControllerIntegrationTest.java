@@ -44,7 +44,7 @@ public class PhoneControllerIntegrationTest {
     }
 
     @Test
-    public void getPhones_FilterPhoneByCustomer_GiveValidCustomer() throws Exception {
+    public void getPhones_filterPhoneByCustomer_giveValidCustomer() throws Exception {
         mockMvc.perform(get("/phones?customerId=8448")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -57,7 +57,7 @@ public class PhoneControllerIntegrationTest {
     }
 
     @Test
-    public void getPhones_ReturnEveryThing_GiveNoCustomer() throws Exception {
+    public void getPhones_returnEveryThing_giveNoCustomer() throws Exception {
         mockMvc.perform(get("/phones")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -72,7 +72,7 @@ public class PhoneControllerIntegrationTest {
     }
 
     @Test
-    public void getPhones_ShouldPaginate_GivePageDetails() throws Exception {
+    public void getPhones_shouldPaginate_givePageDetails() throws Exception {
         mockMvc.perform(get("/phones?pageNo=1&pageSize=3")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

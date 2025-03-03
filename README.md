@@ -24,7 +24,7 @@ There are 3 things I need to achieve,
 
 ## Architecture
 Followed standard practices,
-- Controller, Service, Repository, Domain model and Value objects to expose to outside
+- Controller, Service, Repository, Domain and model objects to expose to outside
 - Added Exception handler for status update to cover phone not found scenario 
 - Most of the 400's are taken care by Spring Boot
 

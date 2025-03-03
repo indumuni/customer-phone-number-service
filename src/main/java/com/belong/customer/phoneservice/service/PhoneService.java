@@ -2,6 +2,7 @@ package com.belong.customer.phoneservice.service;
 
 import com.belong.customer.phoneservice.domain.Phone;
 import com.belong.customer.phoneservice.domain.Status;
+import com.belong.customer.phoneservice.exception.PhoneNotFoundException;
 import com.belong.customer.phoneservice.model.PhoneModel;
 import com.belong.customer.phoneservice.model.PhoneResultsModel;
 import com.belong.customer.phoneservice.repository.PhoneRepository;
@@ -59,6 +60,6 @@ public class PhoneService {
             Phone saved = phoneRepository.save(phone);
             return new PhoneModel(saved.getId(), saved.getCustomerId(), saved.getNumber(), saved.getStatus());
         }
-        return null;
+        throw new PhoneNotFoundException("Phone with id " + phoneId + " does not exist");
     }
 }

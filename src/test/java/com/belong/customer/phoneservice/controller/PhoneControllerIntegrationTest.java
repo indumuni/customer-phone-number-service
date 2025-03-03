@@ -1,7 +1,6 @@
 package com.belong.customer.phoneservice.controller;
 
 import com.belong.customer.phoneservice.domain.Phone;
-import com.belong.customer.phoneservice.domain.Status;
 import com.belong.customer.phoneservice.model.PhonePatchModel;
 import com.belong.customer.phoneservice.repository.PhoneRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -82,6 +81,13 @@ public class PhoneControllerIntegrationTest {
     }
 
     @Test
+    public void getPhones_filterPhoneByCustomer_giveBadCustomerNumber() throws Exception {
+        mockMvc.perform(get("/phones?customerId=ABC")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void getPhones_returnEveryThing_giveNoCustomer() throws Exception {
         mockMvc.perform(get("/phones")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -138,5 +144,21 @@ public class PhoneControllerIntegrationTest {
                 .andExpect(jsonPath("$.customerId").value(3217))
                 .andExpect(jsonPath("$.number").value("+1234567890"))
                 .andExpect(jsonPath("$.status").value("EXPIRED"));
+    }
+
+    @Test
+    public void patchPhoneStatus_shouldNotUpdatePhoneStatus_givenInvalidPhoneId() throws Exception {
+
+        PhonePatchModel patchModel = new PhonePatchModel();
+        patchModel.setStatus(EXPIRED);
+
+        mockMvc.perform(
+                        patch("/phones/{id}", 1000)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(patchModel)))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("Phone with id 1000 does not exist"))
+                .andExpect(jsonPath("$.status").value(404));
     }
 }

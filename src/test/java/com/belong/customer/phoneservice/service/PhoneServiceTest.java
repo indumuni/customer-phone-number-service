@@ -1,7 +1,7 @@
 package com.belong.customer.phoneservice.service;
 
 import com.belong.customer.phoneservice.domain.Phone;
-import com.belong.customer.phoneservice.domain.Status;
+import com.belong.customer.phoneservice.exception.PhoneNotFoundException;
 import com.belong.customer.phoneservice.model.PhoneModel;
 import com.belong.customer.phoneservice.model.PhoneResultsModel;
 import com.belong.customer.phoneservice.repository.PhoneRepository;
@@ -22,6 +22,7 @@ import static com.belong.customer.phoneservice.domain.Status.ACTIVE;
 import static com.belong.customer.phoneservice.domain.Status.EXPIRED;
 import static com.belong.customer.phoneservice.domain.Status.INACTIVE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
@@ -94,10 +95,25 @@ public class PhoneServiceTest {
         PhoneModel model = phoneService.updatePhoneStatus(3217L, EXPIRED);
 
         assertEquals("+1234567890", model.number());
-        assertEquals("suspended", model.status());
+        assertEquals(EXPIRED, model.status());
 
         verify(mockPhoneRepository).findById(3217L);
         verify(mockPhoneRepository).save(any(Phone.class));
+    }
+
+    @Test
+    public void patchPhone_shouldThrow404_givenInvalidPhoneId() {
+
+        Optional<Phone> findPhone = Optional.empty();
+        when(mockPhoneRepository.findById(anyLong())).thenReturn(findPhone);
+
+        PhoneNotFoundException badPhoneIdException = assertThrows(PhoneNotFoundException.class, () -> {
+            phoneService.updatePhoneStatus(1113217L, EXPIRED);
+        });
+
+        assertEquals("Phone with id 1113217 does not exist", badPhoneIdException.getMessage());
+
+        verify(mockPhoneRepository).findById(1113217L);
     }
 
     private void mockPhoneRepositoryFindByCustomer(List<Phone> customerPhones) {

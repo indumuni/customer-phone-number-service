@@ -1,7 +1,6 @@
 package com.belong.customer.phoneservice.data;
 
 import com.belong.customer.phoneservice.domain.Phone;
-import com.belong.customer.phoneservice.domain.Status;
 import com.belong.customer.phoneservice.repository.PhoneRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;

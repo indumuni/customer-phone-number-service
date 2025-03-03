@@ -20,3 +20,10 @@ Content-Type: application/json
 
 {"status": "EXPIRED"}
 ###
+
+### GET phone, all phone with defaults
+PATCH http://localhost:8080/api/phones/6
+Content-Type: application/json
+
+{"status": "EXPIRED"}
+###

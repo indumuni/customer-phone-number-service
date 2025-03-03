@@ -1,14 +1,18 @@
-### GET request with all parameters
-GET http://localhost:8080/api/phones?customerId=11221&pageNo=0&pageSize=100
-
+### GET phone, find customer's phone numbers
+GET http://localhost:8080/api/phones?customerId=8271&pageNo=0&pageSize=100
 ###
 
-### GET request missing customerId
-GET http://localhost:8080/api/phones?pageNo=0&pageSize=100
-
+### GET phone, find all phone numbers restricted to page size 2
+GET http://localhost:8080/api/phones?pageNo=0&pageSize=2
 ###
 
-### GET request with missing parametes
+### GET phone, all phone with defaults
 GET http://localhost:8080/api/phones
+###
 
+### GET phone, all phone with defaults
+PATCH http://localhost:8080/api/phones/5
+Content-Type: application/json
+
+{"status": "suspended"}
 ###

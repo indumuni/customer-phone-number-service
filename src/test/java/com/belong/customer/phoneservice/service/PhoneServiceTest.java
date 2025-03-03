@@ -115,13 +115,12 @@ public class PhoneServiceTest {
     }
 
     private static List<Phone> withAllCustomerPhones() {
-        List<Phone> phoneResults = new ArrayList<>();
-        phoneResults.add(new Phone(3217L, "+1234567890", "active"));
-        phoneResults.add(new Phone(8271L, "+9876543210", "inactive"));
-        phoneResults.add(new Phone(8271L, "+1122334455", "suspended"));
-        phoneResults.add(new Phone(1925L, "+9988776655", "active"));
-        phoneResults.add(new Phone(4032L, "+5544332211", "inactive"));
-        return phoneResults;
+        return List.of(
+        new Phone(3217L, "+1234567890", "active"),
+        new Phone(8271L, "+9876543210", "inactive"),
+        new Phone(8271L, "+1122334455", "suspended"),
+        new Phone(1925L, "+9988776655", "active"),
+        new Phone(4032L, "+5544332211", "inactive"));
     }
 
     private static List<Phone> withSpecificCustomerPhones() {

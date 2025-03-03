@@ -26,21 +26,26 @@ public class PhoneService {
     @Transactional(readOnly = true)
     public PhoneResultsModel findPhonesBy(Optional<Long> customerId, int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Phone> byCustomerId = null;
+        Page<Phone> phoneResults;
         if (customerId.isPresent()) {
-            byCustomerId = phoneRepository.findByCustomerId(customerId.get(), pageable);
+            phoneResults = phoneRepository.findByCustomerId(customerId.get(), pageable);
         } else {
-            byCustomerId = phoneRepository.findAll(pageable);
+            phoneResults = phoneRepository.findAll(pageable);
         }
 
         return new PhoneResultsModel(
-                byCustomerId.getNumber(),
-                byCustomerId.getSize(),
-                byCustomerId.getTotalElements(),
-                getPhoneValues(byCustomerId.getContent()));
+                phoneResults.getNumber(),
+                phoneResults.getTotalElements(),
+                getPhoneValues(phoneResults.getContent()));
     }
 
     private List<PhoneModel> getPhoneValues(List<Phone> content) {
-        return null;
+        return content.stream()
+                .map(p -> new PhoneModel(
+                        p.getId(),
+                        p.getCustomerId(),
+                        p.getNumber(),
+                        p.getStatus()))
+                .toList();
     }
 }

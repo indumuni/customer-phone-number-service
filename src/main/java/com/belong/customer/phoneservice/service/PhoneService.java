@@ -48,4 +48,16 @@ public class PhoneService {
                         p.getStatus()))
                 .toList();
     }
+
+    public PhoneModel updatePhoneStatus(Long phoneId, String phoneStatus) {
+
+        Optional<Phone> byId = phoneRepository.findById(phoneId);
+        if (byId.isPresent()) {
+            Phone phone = byId.get();
+            phone.setStatus(phoneStatus);
+            Phone saved = phoneRepository.save(phone);
+            return new PhoneModel(saved.getId(), saved.getCustomerId(), saved.getNumber(), saved.getStatus());
+        }
+        return null;
+    }
 }

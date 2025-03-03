@@ -10,5 +10,7 @@ There are 3 things I need to achieve,
 2. Two options GET /customer/{customerId}/phone return customers phone numbers or GET /phone?customerId={customerId} where allow ability to filer by customerId. 
 3. PATCH /phone/{phoneId} BODY: { "status": "ACTIVE" }. Other options is to use PUT /phone but that is not very safe given we only update status.
 
-
+TODO:
+Convert status to enum 
+Need to do error handling
 

@@ -20,6 +20,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class PhoneServiceTest {
@@ -75,6 +76,24 @@ public class PhoneServiceTest {
         assertEquals(2, phonesBy.content().size());
         assertEquals("[+9876543210, +1122334455]",
                 phonesBy.content().stream().map(PhoneModel::number).toList().toString());
+    }
+
+    @Test
+    public void patchPhone_shouldSavePhoneWithNewStatus_givenValidRequest() {
+
+        Optional<Phone> findPhone = Optional.of(new Phone(3217L, "+1234567890", "active"));
+        when(mockPhoneRepository.findById(anyLong())).thenReturn(findPhone);
+
+        Phone savedPhone = new Phone(3217L, "+1234567890", "suspended");
+        when(mockPhoneRepository.save(any(Phone.class))).thenReturn(savedPhone);
+
+        PhoneModel model = phoneService.updatePhoneStatus(3217L, "suspended");
+
+        assertEquals("+1234567890", model.number());
+        assertEquals("suspended", model.status());
+
+        verify(mockPhoneRepository).findById(3217L);
+        verify(mockPhoneRepository).save(any(Phone.class));
     }
 
     private void mockPhoneRepositoryFindByCustomer(List<Phone> customerPhones) {

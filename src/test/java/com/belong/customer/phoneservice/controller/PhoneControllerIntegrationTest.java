@@ -1,7 +1,9 @@
 package com.belong.customer.phoneservice.controller;
 
 import com.belong.customer.phoneservice.domain.Phone;
+import com.belong.customer.phoneservice.model.PhonePatchModel;
 import com.belong.customer.phoneservice.repository.PhoneRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +14,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.data.domain.PageRequest.of;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,6 +33,9 @@ public class PhoneControllerIntegrationTest {
 
     @Autowired
     private PhoneRepository phoneRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setUp() {
@@ -81,5 +91,37 @@ public class PhoneControllerIntegrationTest {
                 .andExpect(jsonPath("$.content[0].number").value("+9988776655"))
                 .andExpect(jsonPath("$.content[1].number").value("+5544332211"));
 
+    }
+
+    @Test
+    public void patchPhoneStatus_shouldUpdatePhoneStatus_givenValidPhoneNumber() throws Exception {
+
+        PhonePatchModel patchModel = new PhonePatchModel();
+        patchModel.setStatus("suspended");
+
+        Optional<Phone> validPhone = phoneRepository.findByCustomerId(
+                3217L,
+                of(0, 100)
+        ).stream().findFirst();
+
+        if (validPhone.isEmpty()) {
+            throw new Exception("Cannot find valid phone for testing");
+        }
+
+        Phone original = validPhone.get();
+        Long id = original.getId();
+
+        assertEquals("active", original.getStatus());
+
+        mockMvc.perform(
+                        patch("/phones/{id}", id)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(patchModel)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.customerId").value(3217))
+                .andExpect(jsonPath("$.number").value("+1234567890"))
+                .andExpect(jsonPath("$.status").value("suspended"));
     }
 }

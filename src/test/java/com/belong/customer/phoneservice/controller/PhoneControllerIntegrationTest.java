@@ -84,7 +84,11 @@ public class PhoneControllerIntegrationTest {
     public void getPhones_filterPhoneByCustomer_giveBadCustomerNumber() throws Exception {
         mockMvc.perform(get("/phones?customerId=ABC")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.error").value("For input string: \"ABC\""))
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.path").value("/phones"));
     }
 
     @Test

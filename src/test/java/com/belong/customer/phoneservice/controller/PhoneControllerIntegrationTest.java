@@ -69,6 +69,15 @@ public class PhoneControllerIntegrationTest {
     }
 
     @Test
+    public void getPhones_filterPhoneByCustomer_giveInvalidCustomer() throws Exception {
+        mockMvc.perform(get("/phones?customerId=84488448")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.pageNo").value(0))
+                .andExpect(jsonPath("$.total").value(0));
+    }
+
+    @Test
     public void getPhones_returnEveryThing_giveNoCustomer() throws Exception {
         mockMvc.perform(get("/phones")
                         .contentType(MediaType.APPLICATION_JSON))

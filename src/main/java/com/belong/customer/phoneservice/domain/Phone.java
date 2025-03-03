@@ -4,8 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.Objects;
 
+@Getter
 @Entity
 public class Phone {
 
@@ -13,13 +17,17 @@ public class Phone {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     private Long customerId;
 
+    @Setter
     private String number;
 
+    @Setter
     private Status status;
 
     protected Phone() {
+
     }
 
     public Phone(Long customerId, String number, Status status) {
@@ -28,35 +36,20 @@ public class Phone {
         this.status = status;
     }
 
-    public Long getId() {
-        return id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Phone phone)) {
+            return false;
+        }
+        return Objects.equals(id, phone.id);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
+

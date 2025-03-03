@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class PhoneService {
 
     @Transactional(readOnly = true)
     public PhoneResultsModel findPhonesBy(Optional<Long> customerId, int pageNo, int pageSize) {
+
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Phone> phoneResults;
         if (customerId.isPresent()) {
@@ -41,16 +43,8 @@ public class PhoneService {
                 getPhoneValues(phoneResults.getContent()));
     }
 
-    private List<PhoneModel> getPhoneValues(List<Phone> content) {
-        return content.stream()
-                .map(p -> new PhoneModel(
-                        p.getId(),
-                        p.getCustomerId(),
-                        p.getNumber(),
-                        p.getStatus()))
-                .toList();
-    }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public PhoneModel updatePhoneStatus(Long phoneId, Status phoneStatus) {
 
         Optional<Phone> byId = phoneRepository.findById(phoneId);
@@ -61,5 +55,16 @@ public class PhoneService {
             return new PhoneModel(saved.getId(), saved.getCustomerId(), saved.getNumber(), saved.getStatus());
         }
         throw new PhoneNotFoundException("Phone with id " + phoneId + " does not exist");
+    }
+
+    private List<PhoneModel> getPhoneValues(List<Phone> content) {
+
+        return content.stream()
+                .map(p -> new PhoneModel(
+                        p.getId(),
+                        p.getCustomerId(),
+                        p.getNumber(),
+                        p.getStatus()))
+                .toList();
     }
 }

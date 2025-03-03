@@ -1,4 +1,12 @@
 
+## Version  
+Java 17
+Gradle 8.12.1
+
+## API schema
+[indumuni-PhoneService-1.0.0-swagger.yaml](api/indumuni-PhoneService-1.0.0-swagger.yaml)
+
+
 ### Requirements 
 There are 3 things I need to achieve,
 1. get all phone numbers
@@ -29,3 +37,54 @@ Followed standard practices,
 - Test coverage: Pretty good test coverage with unit tests and integration test.
 - Performance: 
 
+## Command 
+
+```bash
+## build project
+./gradlew clean build
+```
+
+```bash
+## run spring boot app
+./gradlew bootRun
+```
+
+
+After deploying local, below are some API requests
+### Find all phone numbers
+```bash
+curl -X GET http://localhost:8080/api/phones
+```
+
+### Find all phone numbers paginated
+```bash
+curl -X GET 'http://localhost:8080/api/phones?pageNo=0&pageSize=2'
+```
+
+### Find phones for customer 8271
+```bash
+curl -X GET 'http://localhost:8080/api/phones?customerId=8271&pageNo=0&pageSize=100'
+```
+
+### Bad Request due to bad customerId
+```bash
+curl -X GET 'http://localhost:8080/api/phones?customerId=A8271&pageNo=0&pageSize=100'
+```
+
+### Update status
+```bash
+curl -X PATCH http://localhost:8080/api/phones/5 \
+-H "Content-Type: application/json" \
+-d '{
+    "status": "ACTIVE"
+}'
+```
+
+### Bad Update status, Not Found with invalid phone id
+```bash
+curl -X PATCH http://localhost:8080/api/phones/10 \
+-H "Content-Type: application/json" \
+-d '{
+    "status": "ACTIVE"
+}'
+```
